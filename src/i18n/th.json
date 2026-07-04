@@ -1,0 +1,58 @@
+{
+  "app": {
+    "title": "Smwdle",
+    "tagline": "ทายมอนสเตอร์ Summoners War ประจำวัน",
+    "instructions": "ทายมอนสเตอร์ตัวไหนก็ได้ หลังทายแต่ละครั้ง ช่องที่ตรงกันจะเป็นสีเขียว ดาวจะแสดง ▲ (สูงกว่า) หรือ ▼ (ต่ำกว่า)"
+  },
+  "input": {
+    "placeholder": "พิมพ์ชื่อมอนสเตอร์…",
+    "alreadyGuessed": "ทายไปแล้ว",
+    "notFound": "ไม่พบมอนสเตอร์",
+    "submit": "ทาย"
+  },
+  "columns": {
+    "image": "รูป",
+    "monster": "มอนสเตอร์",
+    "element": "ธาตุ",
+    "naturalStars": "ดาว",
+    "role": "ประเภท",
+    "family": "ตระกูล",
+    "secondAwakening": "2A",
+    "gender": "เพศ",
+    "buffs": "บัฟ",
+    "debuffs": "ดีบัฟ"
+  },
+  "status": {
+    "match": "ตรงกัน",
+    "no-match": "ไม่ตรงกัน",
+    "higher": "คำตอบสูงกว่า",
+    "lower": "คำตอบต่ำกว่า",
+    "partial": "ตรงกันบางส่วน"
+  },
+  "result": {
+    "solvedTitle": "ถูกต้อง!",
+    "guessCount": "ทาย {count} ครั้ง",
+    "streak": "สตรีค",
+    "nextIn": "มอนสเตอร์ถัดไปใน",
+    "share": "แชร์",
+    "copied": "คัดลอกแล้ว!"
+  },
+  "stats": {
+    "title": "สถิติ",
+    "played": "เล่นแล้ว",
+    "winRate": "ชนะ %",
+    "current": "สตรีคปัจจุบัน",
+    "max": "สตรีคสูงสุด",
+    "distribution": "การกระจายจำนวนครั้งที่ทาย"
+  },
+  "common": {
+    "close": "ปิด",
+    "stats": "สถิติ",
+    "language": "ภาษา",
+    "theme": "ธีม",
+    "reset": "เปลี่ยนมอนสเตอร์"
+  },
+  "footer": {
+    "attribution": "ข้อมูลจาก SWARFARM • Summoners War เป็นเครื่องหมายการค้าของ Com2uS • โปรเจกต์แฟนเมดไม่แสวงหากำไร ไม่มีส่วนเกี่ยวข้องกับ Com2uS"
+  }
+}

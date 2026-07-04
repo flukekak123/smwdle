@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100;
+}
+
+/* Guess reveal animations */
+@keyframes flip-in {
+  from {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+  60% {
+    transform: rotateX(12deg);
+  }
+  to {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-slide-in {
+  from {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-flip {
+  animation: flip-in 1s ease-out backwards;
+  transform-style: preserve-3d;
+}
+
+.animate-fade {
+  animation: fade-slide-in 0.45s ease-out backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-flip,
+  .animate-fade {
+    animation: none;
+  }
+}

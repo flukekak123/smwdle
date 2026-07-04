@@ -1,0 +1,58 @@
+{
+  "app": {
+    "title": "Smwdle",
+    "tagline": "Guess the daily Summoners War monster",
+    "instructions": "Guess any monster. After each guess, matching attributes turn green. Stars show ▲ (higher) or ▼ (lower)."
+  },
+  "input": {
+    "placeholder": "Type a monster name…",
+    "alreadyGuessed": "Already guessed",
+    "notFound": "No monster found",
+    "submit": "Guess"
+  },
+  "columns": {
+    "image": "Image",
+    "monster": "Monster",
+    "element": "Element",
+    "naturalStars": "Stars",
+    "role": "Role",
+    "family": "Family",
+    "secondAwakening": "2A",
+    "gender": "Gender",
+    "buffs": "Buffs",
+    "debuffs": "Debuffs"
+  },
+  "status": {
+    "match": "match",
+    "no-match": "no match",
+    "higher": "answer is higher",
+    "lower": "answer is lower",
+    "partial": "partial match"
+  },
+  "result": {
+    "solvedTitle": "Solved!",
+    "guessCount": "{count} guesses",
+    "streak": "Streak",
+    "nextIn": "Next monster in",
+    "share": "Share",
+    "copied": "Copied to clipboard!"
+  },
+  "stats": {
+    "title": "Statistics",
+    "played": "Played",
+    "winRate": "Win %",
+    "current": "Current streak",
+    "max": "Max streak",
+    "distribution": "Guess distribution"
+  },
+  "common": {
+    "close": "Close",
+    "stats": "Statistics",
+    "language": "Language",
+    "theme": "Theme",
+    "reset": "New monster"
+  },
+  "footer": {
+    "attribution": "Data from SWARFARM. Summoners War is a trademark of Com2uS. Non-commercial fan project, not affiliated with Com2uS."
+  }
+}
