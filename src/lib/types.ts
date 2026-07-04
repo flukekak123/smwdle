@@ -102,4 +102,4 @@ export const SEED = 0x53_4d_57_44; // "SMWD" bytes; arbitrary fixed constant
 
 export const CURRENT_STATE_VERSION = 1;
 
-export const SITE_URL = 'https://smwdle.example';
+export const SITE_URL = 'https://smwdle.vercel.app';
