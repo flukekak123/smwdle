@@ -13,7 +13,7 @@ const ICON: Record<AttributeResult['status'], string> = {
 
 const STYLE: Record<AttributeResult['status'], string> = {
   match: 'bg-green-600 text-white border-green-700',
-  'no-match': 'bg-slate-200 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600',
+  'no-match': 'bg-red-600 text-white border-red-700',
   higher: 'bg-amber-500 text-white border-amber-600',
   lower: 'bg-amber-500 text-white border-amber-600',
   partial: 'bg-yellow-400 text-slate-900 border-yellow-500',
