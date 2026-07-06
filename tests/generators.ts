@@ -48,6 +48,12 @@ const monsterCoreArb = fc.record({
   gender: genderArb,
   buffs: effectListArb,
   debuffs: effectListArb,
+  stats: fc.record({
+    hp: fc.nat({ max: 15000 }),
+    atk: fc.nat({ max: 1200 }),
+    def: fc.nat({ max: 1200 }),
+    spd: fc.nat({ max: 130 }),
+  }),
   imageUrl: fc.constant(null),
   inAnswerPool: fc.boolean(),
 });

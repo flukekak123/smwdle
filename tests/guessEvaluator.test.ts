@@ -17,6 +17,7 @@ const base: Monster = {
   gender: 'Male',
   buffs: ['Heal', 'Immunity'],
   debuffs: ['Stun'],
+  stats: { hp: 9000, atk: 800, def: 500, spd: 100 },
   imageUrl: null,
   inAnswerPool: true,
 };

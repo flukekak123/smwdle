@@ -7,7 +7,8 @@
   "mode": {
     "classic": "Classic",
     "silhouette": "Silhouette",
-    "emoji": "Emoji"
+    "emoji": "Emoji",
+    "higherlower": "Higher/Lower"
   },
   "silhouette": {
     "prompt": "Guess the monster from its silhouette",
@@ -16,6 +17,19 @@
   },
   "emoji": {
     "prompt": "Guess the monster from these emoji"
+  },
+  "higherlower": {
+    "prompt": "Which has the higher {stat}?",
+    "score": "Score",
+    "best": "Best",
+    "gameover": "Game over!",
+    "playAgain": "Play again"
+  },
+  "hl": {
+    "atk": "ATK",
+    "hp": "HP",
+    "def": "DEF",
+    "spd": "SPD"
   },
   "input": {
     "placeholder": "Type a monster name…",

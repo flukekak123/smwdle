@@ -7,7 +7,8 @@
   "mode": {
     "classic": "คลาสสิก",
     "silhouette": "เงา",
-    "emoji": "อิโมจิ"
+    "emoji": "อิโมจิ",
+    "higherlower": "สูง/ต่ำ"
   },
   "silhouette": {
     "prompt": "ทายมอนสเตอร์จากเงา",
@@ -16,6 +17,19 @@
   },
   "emoji": {
     "prompt": "ทายมอนสเตอร์จากอิโมจิ"
+  },
+  "higherlower": {
+    "prompt": "ตัวไหนมีค่า {stat} สูงกว่า?",
+    "score": "คะแนน",
+    "best": "สูงสุด",
+    "gameover": "จบเกม!",
+    "playAgain": "เล่นอีกครั้ง"
+  },
+  "hl": {
+    "atk": "ATK",
+    "hp": "HP",
+    "def": "DEF",
+    "spd": "SPD"
   },
   "input": {
     "placeholder": "พิมพ์ชื่อมอนสเตอร์…",

@@ -21,6 +21,8 @@ export interface Monster {
   buffs: string[];
   /** Debuff effects inflicted by the monster's skills (deduped, sorted). */
   debuffs: string[];
+  /** Awakened 6★ max-level base stats (no runes) — used by Higher/Lower mode. */
+  stats: { hp: number; atk: number; def: number; spd: number };
   imageUrl: string | null;
   inAnswerPool: boolean;
 }

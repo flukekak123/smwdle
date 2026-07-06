@@ -47,6 +47,13 @@ interface Raw {
   skills?: number[];
   transforms_to?: unknown;
   source?: Array<{ name?: string }>;
+  max_lvl_hp?: number;
+  max_lvl_attack?: number;
+  max_lvl_defense?: number;
+  base_hp?: number;
+  base_attack?: number;
+  base_defense?: number;
+  speed?: number;
 }
 
 const ELEMENT_MAP: Record<string, Element> = {
@@ -211,6 +218,12 @@ function transform(
       gender: 'Unknown' as Gender,
       buffs: [...buffSet].sort(),
       debuffs: [...debuffSet].sort(),
+      stats: {
+        hp: unique.max_lvl_hp ?? unique.base_hp ?? 0,
+        atk: unique.max_lvl_attack ?? unique.base_attack ?? 0,
+        def: unique.max_lvl_defense ?? unique.base_defense ?? 0,
+        spd: unique.speed ?? 0,
+      },
       imageUrl,
       inAnswerPool: stars >= ANSWER_POOL_MIN_STARS,
     });
