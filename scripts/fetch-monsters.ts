@@ -17,7 +17,16 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import type { Element, Gender, Monster, NaturalStars, Role } from '../src/lib/types.js';
+import type { Element, Gender, LeaderArea, Monster, NaturalStars, Role } from '../src/lib/types.js';
+
+function leaderArea(ls?: { area?: string } | null): LeaderArea {
+  const a = (ls?.area ?? '').toLowerCase();
+  if (!a) return 'None';
+  if (a.includes('arena')) return 'Arena';
+  if (a.includes('guild')) return 'Guild War';
+  if (a.includes('dungeon')) return 'Dungeon';
+  return 'All'; // General, Element, or anything else = applies everywhere
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, '../src/data/monsters.json');
@@ -45,6 +54,7 @@ interface Raw {
   bestiary_slug: string;
   image_filename?: string;
   skills?: number[];
+  leader_skill?: { area?: string } | null;
   transforms_to?: unknown;
   source?: Array<{ name?: string }>;
   max_lvl_hp?: number;
@@ -216,6 +226,7 @@ function transform(
       source: normalizeSource(first.source),
       secondAwakening: has2A,
       gender: 'Unknown' as Gender,
+      leaderSkill: leaderArea(unique.leader_skill),
       buffs: [...buffSet].sort(),
       debuffs: [...debuffSet].sort(),
       stats: {

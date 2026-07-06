@@ -46,6 +46,9 @@ const monsterCoreArb = fc.record({
   source: fc.constantFrom('Unknown Scroll', 'Mystical Scroll', 'Light & Dark Scroll', 'Fusion'),
   secondAwakening: fc.boolean(),
   gender: genderArb,
+  leaderSkill: fc.constantFrom('Arena', 'Guild War', 'Dungeon', 'All', 'None') as fc.Arbitrary<
+    Monster['leaderSkill']
+  >,
   buffs: effectListArb,
   debuffs: effectListArb,
   stats: fc.record({

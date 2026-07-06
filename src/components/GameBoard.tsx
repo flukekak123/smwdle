@@ -32,7 +32,7 @@ export function GameBoard({ guesses }: { guesses: GuessResult[] }) {
 
   return (
     <div data-testid="game-board" className="w-full overflow-x-auto">
-      <div className="min-w-[880px]">
+      <div className="min-w-[900px]">
         {/* Column headers: Image + Monster + attributes */}
         <div className="grid grid-cols-10 gap-1 pb-1 text-center text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 sm:text-xs">
           <div>{t('columns.image')}</div>

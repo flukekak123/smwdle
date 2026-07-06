@@ -15,6 +15,7 @@ const base: Monster = {
   source: 'Unknown Scroll',
   secondAwakening: false,
   gender: 'Male',
+  leaderSkill: 'Arena',
   buffs: ['Heal', 'Immunity'],
   debuffs: ['Stun'],
   stats: { hp: 9000, atk: 800, def: 500, spd: 100 },

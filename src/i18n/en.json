@@ -45,7 +45,7 @@
     "role": "Role",
     "family": "Family",
     "secondAwakening": "2A",
-    "gender": "Gender",
+    "leaderSkill": "Leader",
     "buffs": "Buffs",
     "debuffs": "Debuffs"
   },

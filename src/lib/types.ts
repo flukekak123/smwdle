@@ -6,6 +6,8 @@ export type Role = 'Attack' | 'Defense' | 'HP' | 'Support';
 export type Gender = 'Male' | 'Female' | 'Unknown';
 export type NaturalStars = 1 | 2 | 3 | 4 | 5;
 export type Locale = 'en' | 'th';
+/** Where a monster's leader skill applies. */
+export type LeaderArea = 'Arena' | 'Guild War' | 'Dungeon' | 'All' | 'None';
 
 export interface Monster {
   id: number;
@@ -17,6 +19,8 @@ export interface Monster {
   source: string;
   secondAwakening: boolean;
   gender: Gender;
+  /** Where the leader skill applies (Arena / Guild War / Dungeon / All / None). */
+  leaderSkill: LeaderArea;
   /** Buff effects granted by the monster's skills (deduped, sorted). */
   buffs: string[];
   /** Debuff effects inflicted by the monster's skills (deduped, sorted). */
@@ -40,7 +44,7 @@ export type AttributeKey =
   | 'role'
   | 'family'
   | 'secondAwakening'
-  | 'gender'
+  | 'leaderSkill'
   | 'buffs'
   | 'debuffs';
 
@@ -91,7 +95,7 @@ export const ATTRIBUTE_ORDER: AttributeKey[] = [
   'role',
   'family',
   'secondAwakening',
-  'gender',
+  'leaderSkill',
   'buffs',
   'debuffs',
 ];
