@@ -15,7 +15,15 @@ export interface MonsterCatalog {
 export function createCatalog(monsters: readonly Monster[]): MonsterCatalog {
   const all = monsters.slice();
   const byId = new Map<number, Monster>();
-  const indexed = all.map((m) => ({ m, norm: normalize(m.name) }));
+  // Per monster: awakened name + aliases (family, "family element", "element family")
+  // so searching either the unique name (Taor) or the pre-awaken form (Chimera Water) works.
+  const indexed = all.map((m) => {
+    const norm = normalize(m.name);
+    const fam = normalize(m.family);
+    const el = normalize(m.element);
+    const aliases = [fam, `${fam} ${el}`, `${el} ${fam}`].filter((a) => a.length > 0);
+    return { m, norm, aliases };
+  });
   for (const m of all) byId.set(m.id, m);
 
   // Answer pool in a stable order (by id) so the seeded shuffle is reproducible.
@@ -27,16 +35,18 @@ export function createCatalog(monsters: readonly Monster[]): MonsterCatalog {
     const q = normalize(query);
     if (q.length === 0) return [];
 
-    const starts: Monster[] = [];
-    const contains: Monster[] = [];
-    for (const { m, norm } of indexed) {
-      if (norm.startsWith(q)) starts.push(m);
-      else if (norm.includes(q)) contains.push(m);
+    // Rank: 0 name-startsWith, 1 name-includes, 2 alias-startsWith, 3 alias-includes.
+    const scored: { m: Monster; rank: number }[] = [];
+    for (const { m, norm, aliases } of indexed) {
+      let rank = Infinity;
+      if (norm.startsWith(q)) rank = 0;
+      else if (norm.includes(q)) rank = 1;
+      else if (aliases.some((a) => a.startsWith(q))) rank = 2;
+      else if (aliases.some((a) => a.includes(q))) rank = 3;
+      if (rank < Infinity) scored.push({ m, rank });
     }
-    const byNameLen = (a: Monster, b: Monster) => a.name.length - b.name.length;
-    starts.sort(byNameLen);
-    contains.sort(byNameLen);
-    let results = [...starts, ...contains];
+    scored.sort((a, b) => a.rank - b.rank || a.m.name.length - b.m.name.length);
+    let results = scored.map((x) => x.m);
 
     // Typo-tolerant fallback: only when no substring hits and the query is short.
     if (results.length === 0 && q.length >= 3 && q.length <= 12) {

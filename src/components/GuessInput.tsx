@@ -120,6 +120,7 @@ export function GuessInput({ guessedIds, disabled, onGuess }: Props) {
                   i === activeIndex ? 'text-white/80' : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
+                {m.family !== 'Unknown' ? `${m.family} · ` : ''}
                 {m.element} · {m.naturalStars}★
               </span>
             </li>

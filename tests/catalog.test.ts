@@ -43,6 +43,18 @@ describe('createCatalog', () => {
     expect(results[0]?.name).toBe('Loren'); // starts with "lo"
   });
 
+  it('matches by family (pre-awaken name)', () => {
+    // all test monsters are the Vampire family, Fire element
+    expect(cat.findByName('vampire')).toHaveLength(4);
+    expect(cat.findByName('fire vampire').length).toBeGreaterThan(0);
+    expect(cat.findByName('vampire fire').length).toBeGreaterThan(0);
+  });
+
+  it('ranks a unique-name match above a family match', () => {
+    const results = cat.findByName('lo'); // "Loren" starts with lo; family Vampire does not
+    expect(results[0]?.name).toBe('Loren');
+  });
+
   it('is typo tolerant (edit distance 1)', () => {
     const results = cat.findByName('lushon'); // 1 substitution from "lushen"
     expect(results.some((m) => m.name === 'Lushen')).toBe(true);
