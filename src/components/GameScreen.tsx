@@ -20,7 +20,7 @@ import { SkillGame } from './SkillGame';
 type Mode = 'classic' | 'silhouette' | 'emoji' | 'zoom' | 'skill' | 'higherlower';
 const MODE_KEY = 'smwdle:mode';
 
-const BACKGROUNDS = ['/backgrounds/smw_background_3.jpeg', '/backgrounds/smw_background_5.jpeg'];
+const BACKGROUNDS = ['/backgrounds/smw_background_3.jpeg','/backgrounds/smw_background_4.jpeg', '/backgrounds/smw_background_5.jpeg'];
 
 export function GameScreen() {
   const t = useTranslations();
@@ -85,10 +85,10 @@ export function GameScreen() {
           <div className="fixed inset-0 -z-10 bg-slate-50/70 dark:bg-slate-900/80" aria-hidden="true" />
         </>
       )}
-      <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-4 px-4 py-6">
+      <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center gap-4 px-4 py-6">
       <Header onOpenStats={() => setStatsOpen(true)} />
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap justify-center gap-2">
         {tab('classic', t('mode.classic'))}
         {tab('silhouette', t('mode.silhouette'))}
         {tab('emoji', t('mode.emoji'))}
@@ -99,7 +99,9 @@ export function GameScreen() {
 
       {mode === 'classic' && (
         <>
-          <p className="text-sm text-slate-600 dark:text-slate-300">{t('app.instructions')}</p>
+          <p className="w-full max-w-xl text-center text-sm text-slate-600 dark:text-slate-300">
+            {t('app.instructions')}
+          </p>
 
           {!hydrated || !ready ? (
             <div className="h-12 w-full animate-pulse rounded-lg bg-slate-200 dark:bg-slate-700" aria-hidden="true" />

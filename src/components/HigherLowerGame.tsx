@@ -32,8 +32,12 @@ export function HigherLowerGame() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const nextRound = () => {
-    setPair(pickPair(pool));
-    setStat(STATS[Math.floor(Math.random() * STATS.length)]!);
+    const st = STATS[Math.floor(Math.random() * STATS.length)]!;
+    // Avoid ties: re-roll the pair until the two differ on the chosen stat.
+    let p = pickPair(pool);
+    for (let i = 0; i < 15 && p[0].stats[st] === p[1].stats[st]; i++) p = pickPair(pool);
+    setStat(st);
+    setPair(p);
     setRevealedPick(null);
   };
 
