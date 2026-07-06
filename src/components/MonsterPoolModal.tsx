@@ -24,16 +24,18 @@ export function MonsterPoolModal({ open, onClose }: { open: boolean; onClose: ()
   const [q, setQ] = useState('');
   const [element, setElement] = useState<Element | 'All'>('All');
   const [role, setRole] = useState<Role | 'All'>('All');
+  const [stars, setStars] = useState<4 | 5 | 'All'>('All');
 
   const filtered = useMemo(() => {
     const nq = normalize(q);
     return pool.filter((m) => {
       if (element !== 'All' && m.element !== element) return false;
       if (role !== 'All' && m.role !== role) return false;
+      if (stars !== 'All' && m.naturalStars !== stars) return false;
       if (nq && !(normalize(m.name).includes(nq) || normalize(m.family).includes(nq))) return false;
       return true;
     });
-  }, [q, element, role, pool]);
+  }, [q, element, role, stars, pool]);
 
   const chip = (active: boolean, onClick: () => void, label: React.ReactNode, key: string) => (
     <button
@@ -84,9 +86,15 @@ export function MonsterPoolModal({ open, onClose }: { open: boolean; onClose: ()
       </div>
 
       {/* Role filter */}
-      <div className="mb-3 flex flex-wrap gap-1">
+      <div className="mb-2 flex flex-wrap gap-1">
         {chip(role === 'All', () => setRole('All'), t('common.all'), 'role-all')}
         {ROLES.map((r) => chip(role === r, () => setRole(r), r, `role-${r}`))}
+      </div>
+
+      {/* Stars filter (answer pool is 4★+) */}
+      <div className="mb-3 flex flex-wrap gap-1">
+        {chip(stars === 'All', () => setStars('All'), t('common.all'), 'star-all')}
+        {([4, 5] as const).map((s) => chip(stars === s, () => setStars(s), `${s}★`, `star-${s}`))}
       </div>
 
       <div className="max-h-[52vh] overflow-y-auto">
