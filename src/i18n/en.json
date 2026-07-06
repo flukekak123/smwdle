@@ -4,6 +4,19 @@
     "tagline": "Guess the daily Summoners War monster",
     "instructions": "Guess any monster. After each guess, matching attributes turn green. Stars show ▲ (higher) or ▼ (lower)."
   },
+  "mode": {
+    "classic": "Classic",
+    "silhouette": "Silhouette",
+    "emoji": "Emoji"
+  },
+  "silhouette": {
+    "prompt": "Guess the monster from its silhouette",
+    "revealHint": "Each wrong guess lightens the silhouette",
+    "solvedName": "It was {name}!"
+  },
+  "emoji": {
+    "prompt": "Guess the monster from these emoji"
+  },
   "input": {
     "placeholder": "Type a monster name…",
     "alreadyGuessed": "Already guessed",

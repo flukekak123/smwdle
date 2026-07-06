@@ -100,6 +100,12 @@ export const EPOCH = new Date(2026, 0, 1);
 /** Seed for the deterministic answer-pool shuffle. Changing this reshuffles the whole schedule. */
 export const SEED = 0x53_4d_57_44; // "SMWD" bytes; arbitrary fixed constant
 
+/** Separate seed for Silhouette mode so its daily monster differs from Classic. */
+export const SILHOUETTE_SEED = 0x53_49_4c_48; // "SILH"
+
+/** Separate seed for Emoji mode. */
+export const EMOJI_SEED = 0x45_4d_4a_49; // "EMJI"
+
 export const CURRENT_STATE_VERSION = 1;
 
 export const SITE_URL = 'https://smwdle.vercel.app';
