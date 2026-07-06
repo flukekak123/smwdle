@@ -16,6 +16,7 @@ import { EmojiGame } from './EmojiGame';
 import { HigherLowerGame } from './HigherLowerGame';
 import { ZoomGame } from './ZoomGame';
 import { SkillGame } from './SkillGame';
+import { MonsterPoolModal } from './MonsterPoolModal';
 
 type Mode = 'classic' | 'silhouette' | 'emoji' | 'zoom' | 'skill' | 'higherlower';
 const MODE_KEY = 'smwdle:mode';
@@ -28,6 +29,7 @@ export function GameScreen() {
   const { ready, guesses, solved, submitGuess, resetToday, secret, result, nextResetAt, stats } =
     useGame();
   const [statsOpen, setStatsOpen] = useState(false);
+  const [poolOpen, setPoolOpen] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [mode, setMode] = useState<Mode>('classic');
   const [bg, setBg] = useState<string | null>(null);
@@ -86,7 +88,7 @@ export function GameScreen() {
         </>
       )}
       <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center gap-4 px-4 py-6">
-      <Header onOpenStats={() => setStatsOpen(true)} />
+      <Header onOpenStats={() => setStatsOpen(true)} onOpenPool={() => setPoolOpen(true)} />
 
       <div className="flex flex-wrap justify-center gap-2">
         {tab('classic', t('mode.classic'))}
@@ -150,6 +152,7 @@ export function GameScreen() {
       )}
 
       {hydrated && <StatsPanel open={statsOpen} onClose={() => setStatsOpen(false)} stats={stats} />}
+      {hydrated && <MonsterPoolModal open={poolOpen} onClose={() => setPoolOpen(false)} />}
       </main>
     </>
   );

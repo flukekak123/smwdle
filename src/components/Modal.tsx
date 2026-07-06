@@ -9,9 +9,11 @@ interface Props {
   title: string;
   children: ReactNode;
   testId?: string;
+  /** Tailwind max-width class for the dialog (default max-w-md). */
+  size?: string;
 }
 
-export function Modal({ open, onClose, title, children, testId }: Props) {
+export function Modal({ open, onClose, title, children, testId, size = 'max-w-md' }: Props) {
   const t = useTranslations();
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -37,7 +39,7 @@ export function Modal({ open, onClose, title, children, testId }: Props) {
         aria-modal="true"
         aria-label={title}
         data-testid={testId}
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-slate-800"
+        className={`w-full ${size} rounded-2xl bg-white p-6 shadow-xl dark:bg-slate-800`}
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">

@@ -88,7 +88,9 @@
     "stats": "Statistics",
     "language": "Language",
     "theme": "Theme",
-    "reset": "New monster"
+    "reset": "New monster",
+    "pool": "Monster pool",
+    "all": "All"
   },
   "footer": {
     "attribution": "Data from SWARFARM. Summoners War is a trademark of Com2uS. Non-commercial fan project, not affiliated with Com2uS."
