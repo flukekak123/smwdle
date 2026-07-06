@@ -8,6 +8,8 @@
     "classic": "Classic",
     "silhouette": "Silhouette",
     "emoji": "Emoji",
+    "zoom": "Zoom",
+    "skill": "Skill",
     "higherlower": "Higher/Lower"
   },
   "silhouette": {
@@ -17,6 +19,15 @@
   },
   "emoji": {
     "prompt": "Guess the monster from these emoji"
+  },
+  "zoom": {
+    "prompt": "Guess the monster from the zoomed-in image",
+    "revealHint": "Each wrong guess zooms out a little"
+  },
+  "skill": {
+    "prompt": "Guess the monster from its skill",
+    "revealHint": "Each wrong guess reveals another skill",
+    "slot": "Skill {slot}"
   },
   "higherlower": {
     "prompt": "Which has the higher {stat}?",

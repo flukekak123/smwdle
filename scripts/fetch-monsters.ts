@@ -30,6 +30,7 @@ function leaderArea(ls?: { area?: string } | null): LeaderArea {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, '../src/data/monsters.json');
+const SKILLS_PATH = resolve(__dirname, '../public/skills.json');
 
 const START_URL =
   'https://swarfarm.com/api/v2/monsters/?format=json&page_size=100&is_awakened=true&obtainable=true';
@@ -110,14 +111,23 @@ function normalizeSource(sources?: Array<{ name?: string }>): string {
 
 interface RawSkill {
   id: number;
+  name?: string;
+  description?: string;
+  slot?: number;
   effects?: Array<{ effect?: { name?: string; is_buff?: boolean } }>;
 }
 
-/** Fetch skill effect data in id__in batches; returns skillId -> {buffs, debuffs}. */
-async function fetchSkillEffects(
-  skillIds: number[],
-): Promise<Map<number, { buffs: string[]; debuffs: string[] }>> {
-  const map = new Map<number, { buffs: string[]; debuffs: string[] }>();
+interface SkillInfo {
+  buffs: string[];
+  debuffs: string[];
+  name: string;
+  description: string;
+  slot: number;
+}
+
+/** Fetch skill data in id__in batches; returns skillId -> {buffs, debuffs, name, description, slot}. */
+async function fetchSkillEffects(skillIds: number[]): Promise<Map<number, SkillInfo>> {
+  const map = new Map<number, SkillInfo>();
   const BATCH = 100;
   for (let i = 0; i < skillIds.length; i += BATCH) {
     const batch = skillIds.slice(i, i + BATCH);
@@ -133,7 +143,13 @@ async function fetchSkillEffects(
         if (!name) continue;
         (e.effect?.is_buff ? buffs : debuffs).add(name);
       }
-      map.set(s.id, { buffs: [...buffs].sort(), debuffs: [...debuffs].sort() });
+      map.set(s.id, {
+        buffs: [...buffs].sort(),
+        debuffs: [...debuffs].sort(),
+        name: (s.name ?? '').trim(),
+        description: (s.description ?? '').trim(),
+        slot: s.slot ?? 0,
+      });
     }
     process.stdout.write(`\r  fetched skills ${Math.min(i + BATCH, skillIds.length)}/${skillIds.length}…`);
   }
@@ -165,10 +181,17 @@ async function fetchAll(): Promise<Raw[]> {
  * unique name (e.g. "Velajuel"). We group by com2us_id and pick the unique-name
  * record (its kebab name is the slug suffix); family = the remaining slug middle.
  */
+interface SkillDetail {
+  slot: number;
+  name: string;
+  description: string;
+}
+
 function transform(
   raw: Raw[],
-  skillMap: Map<number, { buffs: string[]; debuffs: string[] }>,
-): Monster[] {
+  skillMap: Map<number, SkillInfo>,
+): { monsters: Monster[]; skills: Record<number, SkillDetail[]> } {
+  const skillsOut: Record<number, SkillDetail[]> = {};
   // Group by bestiary_slug: SWARFARM emits two records per awakened monster
   // (family name + unique name) that share one slug but differ in com2us_id.
   const groups = new Map<string, Raw[]>();
@@ -238,10 +261,19 @@ function transform(
       imageUrl,
       inAnswerPool: stars >= ANSWER_POOL_MIN_STARS,
     });
+
+    // Skill text (only for answer-pool monsters — the Skill mode only reveals the secret's skills).
+    if (stars >= ANSWER_POOL_MIN_STARS) {
+      const details: SkillDetail[] = (unique.skills ?? [])
+        .map((sid) => skillMap.get(sid))
+        .filter((s): s is SkillInfo => Boolean(s && s.description))
+        .map((s) => ({ slot: s.slot, name: s.name, description: s.description }));
+      if (details.length > 0) skillsOut[unique.com2us_id] = details;
+    }
   }
 
   out.sort((a, b) => a.id - b.id);
-  return out;
+  return { monsters: out, skills: skillsOut };
 }
 
 async function main(): Promise<void> {
@@ -254,17 +286,19 @@ async function main(): Promise<void> {
   ];
   console.log(`Fetching effects for ${skillIds.length} skills…`);
   const skillMap = await fetchSkillEffects(skillIds);
-  const monsters = transform(raw, skillMap);
+  const { monsters, skills } = transform(raw, skillMap);
   if (monsters.length === 0) throw new Error('No monsters produced; aborting (keeping existing file).');
   const pool = monsters.filter((m) => m.inAnswerPool);
   if (pool.length === 0) throw new Error('Answer pool empty; check ANSWER_POOL_MIN_STARS.');
 
   writeFileSync(OUT_PATH, JSON.stringify(monsters, null, 2) + '\n', 'utf8');
+  writeFileSync(SKILLS_PATH, JSON.stringify(skills) + '\n', 'utf8');
   const byStar: Record<number, number> = {};
   for (const m of monsters) byStar[m.naturalStars] = (byStar[m.naturalStars] ?? 0) + 1;
   console.log(`Wrote ${monsters.length} monsters → ${OUT_PATH}`);
   console.log(`  answer pool (>=${ANSWER_POOL_MIN_STARS}★): ${pool.length}`);
   console.log(`  by stars: ${JSON.stringify(byStar)}`);
+  console.log(`  skills for ${Object.keys(skills).length} monsters → ${SKILLS_PATH}`);
 }
 
 main().catch((err) => {

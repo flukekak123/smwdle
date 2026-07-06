@@ -14,8 +14,10 @@ import { StatsPanel } from './StatsPanel';
 import { SilhouetteGame } from './SilhouetteGame';
 import { EmojiGame } from './EmojiGame';
 import { HigherLowerGame } from './HigherLowerGame';
+import { ZoomGame } from './ZoomGame';
+import { SkillGame } from './SkillGame';
 
-type Mode = 'classic' | 'silhouette' | 'emoji' | 'higherlower';
+type Mode = 'classic' | 'silhouette' | 'emoji' | 'zoom' | 'skill' | 'higherlower';
 const MODE_KEY = 'smwdle:mode';
 
 const BACKGROUNDS = ['/backgrounds/smw_background_3.jpeg', '/backgrounds/smw_background_5.jpeg'];
@@ -32,7 +34,14 @@ export function GameScreen() {
 
   useEffect(() => {
     const saved = safeStorage.get(MODE_KEY);
-    if (saved === 'classic' || saved === 'silhouette' || saved === 'emoji' || saved === 'higherlower')
+    if (
+      saved === 'classic' ||
+      saved === 'silhouette' ||
+      saved === 'emoji' ||
+      saved === 'zoom' ||
+      saved === 'skill' ||
+      saved === 'higherlower'
+    )
       setMode(saved);
     // Random background each visit (client-side to avoid hydration mismatch).
     setBg(BACKGROUNDS[Math.floor(Math.random() * BACKGROUNDS.length)]!);
@@ -83,6 +92,8 @@ export function GameScreen() {
         {tab('classic', t('mode.classic'))}
         {tab('silhouette', t('mode.silhouette'))}
         {tab('emoji', t('mode.emoji'))}
+        {tab('zoom', t('mode.zoom'))}
+        {tab('skill', t('mode.skill'))}
         {tab('higherlower', t('mode.higherlower'))}
       </div>
 
@@ -119,6 +130,8 @@ export function GameScreen() {
 
       {mode === 'silhouette' && <SilhouetteGame />}
       {mode === 'emoji' && <EmojiGame />}
+      {mode === 'zoom' && <ZoomGame />}
+      {mode === 'skill' && <SkillGame />}
       {mode === 'higherlower' && <HigherLowerGame />}
 
       <Footer />

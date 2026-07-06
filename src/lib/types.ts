@@ -112,6 +112,12 @@ export const SILHOUETTE_SEED = 0x53_49_4c_48; // "SILH"
 /** Separate seed for Emoji mode. */
 export const EMOJI_SEED = 0x45_4d_4a_49; // "EMJI"
 
+/** Separate seed for Zoom mode. */
+export const ZOOM_SEED = 0x5a_4f_4f_4d; // "ZOOM"
+
+/** Separate seed for Skill mode. */
+export const SKILL_SEED = 0x53_4b_49_4c; // "SKIL"
+
 export const CURRENT_STATE_VERSION = 1;
 
 export const SITE_URL = 'https://smwdle.vercel.app';
