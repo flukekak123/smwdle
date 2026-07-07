@@ -11,6 +11,11 @@ function displayValue(m: Monster, key: AttributeKey): string {
     case 'buffs':
     case 'debuffs':
       return m[key].length > 0 ? m[key].join(', ') : 'None';
+    case 'family': {
+      const fams = [...new Set([m.family, ...m.twinFamilies])];
+      const named = fams.filter((f) => f !== 'Unknown');
+      return (named.length ? named : fams).join(' / ');
+    }
     default:
       return String(m[key]);
   }
@@ -31,6 +36,13 @@ function statusFor(guess: Monster, answer: Monster, key: AttributeKey): CellStat
   }
   if (key === 'buffs' || key === 'debuffs') {
     return compareSets(guess[key], answer[key]);
+  }
+  if (key === 'family') {
+    // Twins carry multiple family labels; match if any of the guess's families
+    // lines up with any of the answer's families.
+    const guessFams = new Set([guess.family, ...guess.twinFamilies]);
+    const answerFams = [answer.family, ...answer.twinFamilies];
+    return answerFams.some((f) => guessFams.has(f)) ? 'match' : 'no-match';
   }
   return guess[key] === answer[key] ? 'match' : 'no-match';
 }

@@ -234,6 +234,11 @@ function transform(
 
     const imageUrl = mon.image_filename ? IMAGE_BASE + mon.image_filename : null;
 
+    // Pre-awakened (unawakened) form = another record in the same slug group with its own art.
+    const pre = records.find((r) => r.com2us_id !== mon.com2us_id && r.image_filename);
+    const altName = pre && pre.name !== mon.name ? pre.name : null;
+    const altImageUrl = pre?.image_filename ? IMAGE_BASE + pre.image_filename : null;
+
     // Aggregate buff/debuff effects across the awakened form's skills.
     const buffSet = new Set<string>();
     const debuffSet = new Set<string>();
@@ -264,6 +269,9 @@ function transform(
         spd: mon.speed ?? 0,
       },
       twinIds: [],
+      twinFamilies: [],
+      altName,
+      altImageUrl: altName ? altImageUrl : null,
       imageUrl,
       inAnswerPool: stars >= ANSWER_POOL_MIN_STARS,
     });
@@ -292,7 +300,11 @@ function transform(
   }
   for (const arr of twinGroups.values()) {
     if (arr.length < 2) continue;
-    for (const m of arr) m.twinIds = arr.filter((o) => o.id !== m.id).map((o) => o.id);
+    for (const m of arr) {
+      const others = arr.filter((o) => o.id !== m.id);
+      m.twinIds = others.map((o) => o.id);
+      m.twinFamilies = [...new Set(others.map((o) => o.family).filter((f) => f !== m.family))];
+    }
   }
 
   out.sort((a, b) => a.id - b.id);

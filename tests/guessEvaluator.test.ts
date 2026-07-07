@@ -20,6 +20,9 @@ const base: Monster = {
   debuffs: ['Stun'],
   stats: { hp: 9000, atk: 800, def: 500, spd: 100 },
   twinIds: [],
+  twinFamilies: [],
+  altName: null,
+  altImageUrl: null,
   imageUrl: null,
   inAnswerPool: true,
 };
@@ -60,6 +63,18 @@ describe('evaluate', () => {
   it('correct is driven by id equality', () => {
     expect(isCorrect(base, { ...base })).toBe(true);
     expect(isCorrect(base, { ...base, id: 999 })).toBe(false);
+  });
+
+  it('family hint pairs twin families (match if either lines up)', () => {
+    const ryu = { ...base, id: 1, family: 'Unknown', twinFamilies: ['Striker'] };
+    const striker = { ...base, id: 2, family: 'Striker', twinFamilies: [] };
+    const fam = (g: typeof base, a: typeof base) =>
+      evaluate(g, a).attributes.find((x) => x.key === 'family')!;
+    expect(fam(striker, ryu).status).toBe('match'); // Striker guess vs Ryu (twin=Striker)
+    expect(fam(ryu, striker).status).toBe('match'); // and the reverse
+    expect(fam({ ...base, family: 'Dragon' }, ryu).status).toBe('no-match');
+    // display shows both family labels for a twin
+    expect(fam(ryu, striker).guessValue).toContain('Striker');
   });
 
   it('collab reskin twins count as the same monster', () => {

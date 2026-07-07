@@ -58,6 +58,9 @@ const monsterCoreArb = fc.record({
     spd: fc.nat({ max: 130 }),
   }),
   twinIds: fc.constant([] as number[]),
+  twinFamilies: fc.constant([] as string[]),
+  altName: fc.constant(null),
+  altImageUrl: fc.constant(null),
   imageUrl: fc.constant(null),
   inAnswerPool: fc.boolean(),
 });

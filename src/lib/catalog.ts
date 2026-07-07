@@ -21,7 +21,8 @@ export function createCatalog(monsters: readonly Monster[]): MonsterCatalog {
     const norm = normalize(m.name);
     const fam = normalize(m.family);
     const el = normalize(m.element);
-    const aliases = [fam, `${fam} ${el}`, `${el} ${fam}`].filter((a) => a.length > 0);
+    const alt = m.altName ? normalize(m.altName) : '';
+    const aliases = [fam, `${fam} ${el}`, `${el} ${fam}`, alt].filter((a) => a.length > 0);
     return { m, norm, aliases };
   });
   for (const m of all) byId.set(m.id, m);

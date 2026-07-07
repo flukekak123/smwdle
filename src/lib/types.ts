@@ -29,6 +29,12 @@ export interface Monster {
   stats: { hp: number; atk: number; def: number; spd: number };
   /** Ids of collab reskin twins — same monster, different skin (e.g. Ryu ↔ Douglas). Usually empty. */
   twinIds: number[];
+  /** Family names of this monster's twins (so the Family hint pairs both). Usually empty. */
+  twinFamilies: string[];
+  /** Pre-awakening (unawakened) name, e.g. "Vampire" for Verdehile. null if it never awakens. */
+  altName: string | null;
+  /** Pre-awakening (unawakened) portrait. */
+  altImageUrl: string | null;
   imageUrl: string | null;
   inAnswerPool: boolean;
 }
