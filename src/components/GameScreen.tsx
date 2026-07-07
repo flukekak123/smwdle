@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useGame } from '../providers/GameProvider';
 import { useHydrated } from '../providers/useHydrated';
 import { safeStorage } from '../providers/storage';
+import { useConfetti } from '../providers/Confetti';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { GuessInput } from './GuessInput';
@@ -49,9 +50,14 @@ export function GameScreen() {
     setBg(BACKGROUNDS[Math.floor(Math.random() * BACKGROUNDS.length)]!);
   }, []);
 
+  const fireConfetti = useConfetti();
   useEffect(() => {
-    if (solved) setShowResult(true);
-  }, [solved]);
+    if (!solved) return;
+    fireConfetti();
+    // Let the winning row's reveal + celebration play, then pop the result modal.
+    const id = setTimeout(() => setShowResult(true), 1400);
+    return () => clearTimeout(id);
+  }, [solved, fireConfetti]);
 
   const changeMode = (m: Mode) => {
     setMode(m);

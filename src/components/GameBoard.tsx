@@ -63,7 +63,13 @@ export function GameBoard({ guesses }: { guesses: GuessResult[] }) {
             const fade = animate ? 'animate-fade' : '';
             const imgSize = forms.length > 1 ? 'h-8 w-8' : 'h-10 w-10';
             return (
-              <div key={g.monsterId} className="grid grid-cols-10 gap-1" data-testid="guess-row">
+              <div
+                key={g.monsterId}
+                data-testid="guess-row"
+                className={`grid grid-cols-10 gap-1 ${
+                  g.correct ? 'rounded-md ring-2 ring-green-500 animate-correct' : ''
+                }`}
+              >
                 <div
                   data-testid="guess-row-image"
                   className={`flex min-h-14 flex-wrap items-center justify-center gap-0.5 rounded-md border border-slate-200 bg-slate-100 p-1 dark:border-slate-600 dark:bg-slate-700 ${fade}`}

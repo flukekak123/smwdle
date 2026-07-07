@@ -8,6 +8,7 @@ import { catalog } from '../lib/index';
 import { getDailyMonster, localDateString } from '../lib/dailySelector';
 import { safeStorage } from '../providers/storage';
 import { useHydrated } from '../providers/useHydrated';
+import { useConfetti } from '../providers/Confetti';
 import { GuessInput } from './GuessInput';
 
 const KEY = 'smwdle:silhouette:v1';
@@ -67,6 +68,11 @@ export function SilhouetteGame() {
     setSolved(st.solved);
     setOverrideId(st.override ?? null);
   }, []);
+
+  const fireConfetti = useConfetti();
+  useEffect(() => {
+    if (solved) fireConfetti();
+  }, [solved, fireConfetti]);
 
   if (!hydrated || !secret) {
     return (

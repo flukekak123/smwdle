@@ -17,7 +17,7 @@ Modes are considered complete (Classic, Silhouette, Emoji, Zoom, Skill, Higher/L
 
 ## 3. Polish & onboarding
 - [ ] "How to play" modal (first visit + a ? button).
-- [ ] Win celebration (confetti / subtle animation) on solve.
+- [x] Win celebration (confetti / subtle animation) on solve.
 - [ ] Social preview: proper **OG image** + meta tags so shared links look good.
 - [ ] Mobile pass on the wide Classic board (10 columns → horizontal scroll on phones; consider a condensed layout).
 - [ ] Accessibility sweep (focus order, screen-reader labels on the new modes).

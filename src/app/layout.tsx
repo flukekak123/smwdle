@@ -4,6 +4,7 @@ import './globals.css';
 import { I18nProvider } from '../providers/I18nProvider';
 import { ThemeProvider } from '../providers/ThemeProvider';
 import { GameProvider } from '../providers/GameProvider';
+import { ConfettiProvider } from '../providers/Confetti';
 
 export const metadata: Metadata = {
   title: 'Smwdle — Daily Summoners War Monster Guessing Game',
@@ -17,7 +18,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <ThemeProvider>
           <I18nProvider>
-            <GameProvider>{children}</GameProvider>
+            <ConfettiProvider>
+              <GameProvider>{children}</GameProvider>
+            </ConfettiProvider>
           </I18nProvider>
         </ThemeProvider>
       </body>

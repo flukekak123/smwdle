@@ -8,6 +8,7 @@ import { catalog } from '../lib/index';
 import { getDailyMonster, localDateString } from '../lib/dailySelector';
 import { safeStorage } from '../providers/storage';
 import { useHydrated } from '../providers/useHydrated';
+import { useConfetti } from '../providers/Confetti';
 import { GuessInput } from './GuessInput';
 
 const KEY = 'smwdle:skill:v1';
@@ -79,6 +80,11 @@ export function SkillGame() {
       .then((d: SkillData) => setSkillData(d))
       .catch(() => setSkillData({}));
   }, []);
+
+  const fireConfetti = useConfetti();
+  useEffect(() => {
+    if (solved) fireConfetti();
+  }, [solved, fireConfetti]);
 
   if (!hydrated || !secret || !skillData) {
     return (

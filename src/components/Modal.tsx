@@ -39,7 +39,7 @@ export function Modal({ open, onClose, title, children, testId, size = 'max-w-md
         aria-modal="true"
         aria-label={title}
         data-testid={testId}
-        className={`w-full ${size} rounded-2xl bg-white p-6 shadow-xl dark:bg-slate-800`}
+        className={`animate-pop w-full ${size} rounded-2xl bg-white p-6 shadow-xl dark:bg-slate-800`}
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
