@@ -27,6 +27,8 @@ export interface Monster {
   debuffs: string[];
   /** Awakened 6★ max-level base stats (no runes) — used by Higher/Lower mode. */
   stats: { hp: number; atk: number; def: number; spd: number };
+  /** Ids of collab reskin twins — same monster, different skin (e.g. Ryu ↔ Douglas). Usually empty. */
+  twinIds: number[];
   imageUrl: string | null;
   inAnswerPool: boolean;
 }

@@ -16,6 +16,7 @@ const M = (id: number, name: string, inAnswerPool = false): Monster => ({
   buffs: [],
   debuffs: [],
   stats: { hp: 9000, atk: 800, def: 500, spd: 100 },
+  twinIds: [],
   imageUrl: null,
   inAnswerPool,
 });

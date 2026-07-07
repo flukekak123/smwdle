@@ -35,6 +35,11 @@ function statusFor(guess: Monster, answer: Monster, key: AttributeKey): CellStat
   return guess[key] === answer[key] ? 'match' : 'no-match';
 }
 
+/** Correct on exact id match, or a collab reskin twin (same monster, different skin). */
+export function isCorrect(guess: Monster, answer: Monster): boolean {
+  return guess.id === answer.id || answer.twinIds.includes(guess.id);
+}
+
 /** Compare a guessed monster against the secret across the fixed 7 attributes. */
 export function evaluate(guess: Monster, answer: Monster): GuessResult {
   const attributes: AttributeResult[] = ATTRIBUTE_ORDER.map((key) => ({
@@ -46,10 +51,6 @@ export function evaluate(guess: Monster, answer: Monster): GuessResult {
   return {
     monsterId: guess.id,
     attributes,
-    correct: guess.id === answer.id,
+    correct: isCorrect(guess, answer),
   };
-}
-
-export function isCorrect(guess: Monster, answer: Monster): boolean {
-  return guess.id === answer.id;
 }

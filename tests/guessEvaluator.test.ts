@@ -19,6 +19,7 @@ const base: Monster = {
   buffs: ['Heal', 'Immunity'],
   debuffs: ['Stun'],
   stats: { hp: 9000, atk: 800, def: 500, spd: 100 },
+  twinIds: [],
   imageUrl: null,
   inAnswerPool: true,
 };
@@ -59,6 +60,15 @@ describe('evaluate', () => {
   it('correct is driven by id equality', () => {
     expect(isCorrect(base, { ...base })).toBe(true);
     expect(isCorrect(base, { ...base, id: 999 })).toBe(false);
+  });
+
+  it('collab reskin twins count as the same monster', () => {
+    // e.g. Ryu ↔ Douglas: the answer lists the twin id
+    const ryu = { ...base, id: 24012, twinIds: [24512] };
+    const douglas = { ...base, id: 24512, name: 'Douglas', twinIds: [24012] };
+    expect(isCorrect(douglas, ryu)).toBe(true); // guess Douglas, answer Ryu
+    expect(isCorrect(ryu, douglas)).toBe(true); // and the reverse
+    expect(isCorrect({ ...base, id: 5 }, ryu)).toBe(false); // unrelated monster
   });
 
   it('buffs/debuffs compare as sets: equal → match, overlap → partial, disjoint → no-match', () => {

@@ -24,7 +24,15 @@ export function GuessInput({ guessedIds, disabled, onGuess }: Props) {
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const guessed = useMemo(() => new Set(guessedIds), [guessedIds]);
+  // Exclude already-guessed monsters AND their collab twins (same monster, different skin).
+  const guessed = useMemo(() => {
+    const set = new Set(guessedIds);
+    for (const id of guessedIds) {
+      const m = catalog.getById(id);
+      if (m) for (const twin of m.twinIds) set.add(twin);
+    }
+    return set;
+  }, [guessedIds]);
   const candidates = useMemo(() => {
     if (query.trim().length === 0) return [];
     return catalog.findByName(query).filter((m) => !guessed.has(m.id));

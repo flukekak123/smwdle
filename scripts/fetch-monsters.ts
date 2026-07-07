@@ -55,7 +55,9 @@ interface Raw {
   bestiary_slug: string;
   image_filename?: string;
   skills?: number[];
+  skill_group_id?: number | null;
   leader_skill?: { area?: string } | null;
+  awakens_from?: number | null;
   transforms_to?: unknown;
   source?: Array<{ name?: string }>;
   max_lvl_hp?: number;
@@ -192,6 +194,7 @@ function transform(
   skillMap: Map<number, SkillInfo>,
 ): { monsters: Monster[]; skills: Record<number, SkillDetail[]> } {
   const skillsOut: Record<number, SkillDetail[]> = {};
+  const sgMap = new Map<number, number>(); // monster id -> skill_group_id (for twin detection)
   // Group by bestiary_slug: SWARFARM emits two records per awakened monster
   // (family name + unique name) that share one slug but differ in com2us_id.
   const groups = new Map<string, Raw[]>();
@@ -204,35 +207,37 @@ function transform(
 
   const out: Monster[] = [];
   for (const [, records] of groups) {
-    const first = records[0]!;
-    const element = ELEMENT_MAP[(first.element ?? '').toLowerCase()];
-    const role = ROLE_MAP[(first.archetype ?? '').toLowerCase()];
-    if (!element || !role) continue;
-
-    // slug: comid-element-family...-uniquename
-    const parts = first.bestiary_slug.split('-');
+    // slug: comid-element-family...-uniquename (shared across the group's records)
+    const parts = records[0]!.bestiary_slug.split('-');
     const afterElement = parts.slice(2); // [family..., uniquename]
     const uniqueSlug = afterElement[afterElement.length - 1] ?? '';
     const familySlug = afterElement.slice(0, -1).join('-');
 
-    // Prefer the record whose name matches the unique slug suffix; else longest name.
-    const unique =
+    // Use ONLY the awakened hero record for every field. The awakened record's name
+    // matches the slug's last segment (…-vampire-verdehile → "Verdehile"); the
+    // unawakened/default record ("Vampire") does not. That suffix match is the reliable
+    // discriminator (awakens_from is inconsistent). Fall back to awakens_from, then first.
+    const mon =
       records.find((r) => kebab(r.name) === uniqueSlug) ??
-      records.slice().sort((a, b) => b.name.length - a.name.length)[0]!;
+      records.find((r) => r.awakens_from != null) ??
+      records[0]!;
 
-    const stars = Math.min(5, Math.max(1, first.natural_stars || 1)) as NaturalStars;
+    const element = ELEMENT_MAP[(mon.element ?? '').toLowerCase()];
+    const role = ROLE_MAP[(mon.archetype ?? '').toLowerCase()];
+    if (!element || !role) continue;
+
+    const stars = Math.min(5, Math.max(1, mon.natural_stars || 1)) as NaturalStars;
     if (stars < GUESS_MIN_STARS) continue; // exclude 1★/2★ from the guessable roster
-    const has2A = Array.isArray(first.transforms_to)
-      ? first.transforms_to.length > 0
-      : Boolean(first.transforms_to);
+    const has2A = Array.isArray(mon.transforms_to)
+      ? mon.transforms_to.length > 0
+      : Boolean(mon.transforms_to);
 
-    const imageFile = unique.image_filename ?? first.image_filename;
-    const imageUrl = imageFile ? IMAGE_BASE + imageFile : null;
+    const imageUrl = mon.image_filename ? IMAGE_BASE + mon.image_filename : null;
 
     // Aggregate buff/debuff effects across the awakened form's skills.
     const buffSet = new Set<string>();
     const debuffSet = new Set<string>();
-    for (const skillId of unique.skills ?? []) {
+    for (const skillId of mon.skills ?? []) {
       const eff = skillMap.get(skillId);
       if (!eff) continue;
       for (const b of eff.buffs) buffSet.add(b);
@@ -240,36 +245,54 @@ function transform(
     }
 
     out.push({
-      id: unique.com2us_id,
-      name: unique.name,
+      id: mon.com2us_id,
+      name: mon.name,
       element,
       naturalStars: stars,
       role,
       family: familySlug ? titleCase(familySlug) : 'Unknown',
-      source: normalizeSource(first.source),
+      source: normalizeSource(mon.source),
       secondAwakening: has2A,
       gender: 'Unknown' as Gender,
-      leaderSkill: leaderArea(unique.leader_skill),
+      leaderSkill: leaderArea(mon.leader_skill),
       buffs: [...buffSet].sort(),
       debuffs: [...debuffSet].sort(),
       stats: {
-        hp: unique.max_lvl_hp ?? unique.base_hp ?? 0,
-        atk: unique.max_lvl_attack ?? unique.base_attack ?? 0,
-        def: unique.max_lvl_defense ?? unique.base_defense ?? 0,
-        spd: unique.speed ?? 0,
+        hp: mon.max_lvl_hp ?? mon.base_hp ?? 0,
+        atk: mon.max_lvl_attack ?? mon.base_attack ?? 0,
+        def: mon.max_lvl_defense ?? mon.base_defense ?? 0,
+        spd: mon.speed ?? 0,
       },
+      twinIds: [],
       imageUrl,
       inAnswerPool: stars >= ANSWER_POOL_MIN_STARS,
     });
+    sgMap.set(mon.com2us_id, mon.skill_group_id ?? 0);
 
     // Skill text (only for answer-pool monsters — the Skill mode only reveals the secret's skills).
     if (stars >= ANSWER_POOL_MIN_STARS) {
-      const details: SkillDetail[] = (unique.skills ?? [])
+      const details: SkillDetail[] = (mon.skills ?? [])
         .map((sid) => skillMap.get(sid))
         .filter((s): s is SkillInfo => Boolean(s && s.description))
         .map((s) => ({ slot: s.slot, name: s.name, description: s.description }));
-      if (details.length > 0) skillsOut[unique.com2us_id] = details;
+      if (details.length > 0) skillsOut[mon.com2us_id] = details;
     }
+  }
+
+  // Collab reskin twins: same skill group + element + identical stats (e.g. Ryu ↔ Douglas).
+  // The stats match excludes false positives that merely share a skill archetype (Sage/Woosa).
+  const twinGroups = new Map<string, Monster[]>();
+  for (const m of out) {
+    const sg = sgMap.get(m.id) ?? 0;
+    if (sg <= 0) continue;
+    const key = `${sg}|${m.element}|${m.stats.hp}|${m.stats.atk}|${m.stats.def}|${m.stats.spd}`;
+    const list = twinGroups.get(key) ?? [];
+    list.push(m);
+    twinGroups.set(key, list);
+  }
+  for (const arr of twinGroups.values()) {
+    if (arr.length < 2) continue;
+    for (const m of arr) m.twinIds = arr.filter((o) => o.id !== m.id).map((o) => o.id);
   }
 
   out.sort((a, b) => a.id - b.id);
